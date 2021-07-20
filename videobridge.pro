@@ -4,7 +4,8 @@ QT += multimedia multimediawidgets
 
 CONFIG += c++11
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    bridge.cpp
 
 TARGET = videobridge
 TEMPLATE = app
@@ -18,4 +19,5 @@ RESOURCES += qml.qrc
 DEFINES += QT_DEPRECATED_WARNINGS
 
 
-HEADERS +=
+HEADERS += \
+    bridge.h

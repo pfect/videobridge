@@ -18,7 +18,7 @@ ApplicationWindow {
         Page {
             MediaPlayer {
                 id: mediaplayer1
-                source: "udp://10.30.1.2:9000"
+                source: vBridge.remoteVideoUrl;
                 metaData.onMetaDataChanged:
                 {
                     logContent.text = metaData.videoCodec
@@ -33,7 +33,7 @@ ApplicationWindow {
 
             MediaPlayer {
                 id: mediaplayer2
-                source: "udp://127.0.0.1:4999"
+                source: vBridge.localVideoUrl;
             }
             Rectangle {
                 id: textLog
@@ -73,6 +73,7 @@ ApplicationWindow {
                     source: mediaplayer2
                 }
                 Button {
+                    id: videoOnButton
                     text: "On"
                     width: 75
                     height: 20
@@ -92,6 +93,7 @@ ApplicationWindow {
                     }
                 }
                 Button {
+                    id: videoOffButton
                     text: "Off"
                     width: 75
                     height: 20
@@ -120,12 +122,77 @@ ApplicationWindow {
         }
 
         Page {
-            Text {
-                id: msgPage2
-                anchors.centerIn: parent
-                font.pointSize: 32
-                text: qsTr("Settings page")
+            Label {
+                x: 10
+                y: 5
+                font.pixelSize: Qt.application.font.pixelSize * 1.5
+                text: qsTr("Settings")
             }
+            Label {
+                x: 10
+                y: 45
+                font.pixelSize: Qt.application.font.pixelSize * 1
+                text: qsTr("Local video source:")
+            }
+            TextField {
+                id: localVideoUrlInput
+                x: 150
+                y: 45
+                width: 200
+                color: "#ffff00"
+                Layout.leftMargin: 0
+                text: vBridge.localVideoUrl
+                font.pixelSize: Qt.application.font.pixelSize * 1
+                Layout.fillWidth: true
+                background: Rectangle {
+                            radius: 4
+                            color: "#212529"
+                            implicitWidth: 100
+                            implicitHeight: 20
+                            border.color: "#2ac8a3"
+                            border.width: 1
+                        }
+            }
+            Label {
+                x: 10
+                y: 85
+                font.pixelSize: Qt.application.font.pixelSize * 1
+                text: qsTr("Remote video source:")
+            }
+            TextField {
+                id: remoteVideoUrlInput
+                x: 150
+                y: 85
+                width: 200
+                color: "#ffff00"
+                Layout.leftMargin: 0
+                text: vBridge.remoteVideoUrl
+                font.pixelSize: Qt.application.font.pixelSize * 1
+                Layout.fillWidth: true
+                background: Rectangle {
+                            radius: 4
+                            color: "#212529"
+                            implicitWidth: 100
+                            implicitHeight: 20
+                            border.color: "#2ac8a3"
+                            border.width: 1
+                        }
+            }
+
+            Button {
+                x: 400
+                y: 45
+                width: 100
+                height: 30
+                font.pixelSize: Qt.application.font.pixelSize * 1
+                padding: 0
+                text: qsTr("Save")
+                onClicked: {
+                    vBridge.writeSettings(localVideoUrlInput.text, remoteVideoUrlInput.text);
+                }
+            }
+
+
         }
     }
 

@@ -4,8 +4,8 @@
  * Based on:  https://github.com/b2open/qt-rtsp-test/tree/qml
  *
  * Required packages:
- * libqt5multimedia5-plugins qml-module-qtmultimedia libqt5multimedia
- * qml-module-qtquick-controls2
+ * libqt5multimedia5-plugins qml-module-qtmultimedia5 libqt5multimedia
+ * qml-module-qtquick-controls2 qtdeclarative5-dev
  *
  *
  */
@@ -13,15 +13,21 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include "bridge.h"
 
+bridge *vBridge;
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
+    vBridge = new bridge();
 
     QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("vBridge", vBridge);
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+
+
 
     return app.exec();
 }
