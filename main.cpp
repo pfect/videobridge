@@ -22,12 +22,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
     vBridge = new bridge();
-
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("vBridge", vBridge);
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
-
-
-
     return app.exec();
 }
