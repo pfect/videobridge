@@ -1,6 +1,7 @@
 #include "bridge.h"
 #include <QSettings>
 #include <QDebug>
+#include <QProcess>
 
 bridge::bridge(QObject *parent) : QObject(parent)
 {
@@ -38,4 +39,28 @@ void bridge::writeSettings(QString localUrl, QString remoteUrl)
     readSettings();
     emit remoteVideoUrlChanged();
     emit localVideoUrlChanged();
+}
+
+void bridge::mediaLive()
+{
+    QProcess *p = new QProcess(this);
+    QString program="./media.sh";
+    QString arguments = "";
+    p->start(program,QStringList() << arguments);
+}
+
+void bridge::mediaMute()
+{
+    QProcess *p = new QProcess(this);
+    QString program="./media-mute.sh";
+    QString arguments = "";
+    p->start(program,QStringList() << arguments);
+}
+
+void bridge::mediaOff()
+{
+    QProcess *p = new QProcess(this);
+    QString program="./media-off.sh";
+    QString arguments = "";
+    p->start(program,QStringList() << arguments);
 }

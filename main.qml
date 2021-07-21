@@ -58,7 +58,7 @@ ApplicationWindow {
                 anchors.topMargin: 10
                 anchors.rightMargin: 10
                 width: 160
-                height: 140
+                height: 120
                 border.color: "#000000"
                 color: "#444444"
                 border.width: 3
@@ -67,50 +67,10 @@ ApplicationWindow {
                 VideoOutput {
                     anchors.topMargin: 3
                     anchors.rightMargin: 3
-                    anchors.bottomMargin: 25
+                    anchors.bottomMargin: 3
                     anchors.leftMargin: 3
                     anchors.fill: parent
                     source: mediaplayer2
-                }
-                Button {
-                    id: videoOnButton
-                    text: "On"
-                    width: 75
-                    height: 20
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 5
-                    anchors.leftMargin: 4
-                    palette {
-                            button: "green"
-                    }
-                    onClicked: {
-                        ownVideo.border.color = "#00FF00"
-                        ownVideo.opacity = 1
-                        msgPage1.visible = false
-                        mediaplayer1.play()
-                        mediaplayer2.play()
-                    }
-                }
-                Button {
-                    id: videoOffButton
-                    text: "Off"
-                    width: 75
-                    height: 20
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 5
-                    anchors.rightMargin: 4
-                    palette {
-                            button: "red"
-                    }
-                    onClicked: {
-                        ownVideo.border.color = "#FF0000"
-                        // ownVideo.opacity = 0.2
-                        msgPage1.visible = false
-                        mediaplayer1.stop()
-                        mediaplayer2.stop()
-                    }
                 }
             }
             Text {
@@ -119,6 +79,89 @@ ApplicationWindow {
                 font.pointSize: 24
                 text: qsTr("Welcome to Video Bridge!")
             }
+
+            Rectangle {
+                id: controlButtons
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 100
+                anchors.rightMargin: 10
+                width: 80
+                height: 200
+                border.color: "#000000"
+                color: "transparent"
+                border.width: 0
+                radius: 5
+                opacity: 1
+                Button {
+                    id: videoOnButton
+                    text: "Live"
+                    width: 75
+                    height: 20
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 50
+                    opacity: 1
+                    palette {
+                            button: "green"
+
+                    }
+                    onClicked: {
+                        ownVideo.border.color = "#00FF00"
+                        ownVideo.opacity = 1
+                        msgPage1.visible = false
+                        vBridge.mediaLive()
+                        mediaplayer1.play()
+                        mediaplayer2.play()
+                    }
+                }
+                Button {
+                    id: testImageOn
+                    text: "Mute"
+                    width: 75
+                    height: 20
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 25
+                    opacity: 1
+                    palette {
+                            button: "yellow"
+
+                    }
+                    onClicked: {
+                        ownVideo.border.color = "#FFFF00"
+                        ownVideo.opacity = 1
+                        vBridge.mediaMute()
+                    }
+                }
+                Button {
+                    id: videoOffButton
+                    text: "Off"
+                    width: 75
+                    height: 20
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 2
+                    anchors.rightMargin: 0
+                    opacity: 1
+                    palette {
+                            button: "red"
+                    }
+                    onClicked: {
+                        ownVideo.border.color = "#FF0000"
+                        // ownVideo.opacity = 0.2
+                        msgPage1.visible = false
+                        vBridge.mediaOff()
+                        mediaplayer1.stop()
+                        mediaplayer2.stop()
+                    }
+                }
+
+            }
+
         }
 
         Page {

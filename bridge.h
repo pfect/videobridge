@@ -18,16 +18,16 @@ public:
     Q_INVOKABLE QString getRemoteVideoUrl();
     Q_INVOKABLE QString getLocalVideoUrl();
     Q_INVOKABLE void writeSettings(QString localUrl, QString remoteUrl);
-
+    Q_INVOKABLE void mediaLive();
+    Q_INVOKABLE void mediaMute();
+    Q_INVOKABLE void mediaOff();
 
 signals:
     void remoteVideoUrlChanged();
     void localVideoUrlChanged();
 
 public slots:
-
     void readSettings();
-    // void writeSettings();
 
 };
 
