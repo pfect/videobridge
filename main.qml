@@ -21,7 +21,7 @@ ApplicationWindow {
                 source: vBridge.remoteVideoUrl;
                 metaData.onMetaDataChanged:
                 {
-                    logContent.text = metaData.videoCodec
+                    // logContent.text = metaData.videoCodec
                 }
             }
 
@@ -35,35 +35,93 @@ ApplicationWindow {
                 id: mediaplayer2
                 source: vBridge.localVideoUrl;
             }
-            Rectangle {
-                id: textLog
+
+            /* Hidden at the moment */
+            Item {
+                visible: false
+                id: textLogItem
                 anchors.left: parent.left
                 anchors.top: parent.top
-                anchors.topMargin: 10
-                anchors.leftMargin: 20
-                width: 200
-                height: 140
-                color: "transparent"
-                Text {
-                    id: logContent
-                    text: qsTr("")
-                    color: "white"
+                anchors.topMargin: 5
+                anchors.leftMargin: 7
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 100
+                width: 160
+                clip: true
+                Rectangle {
+                    id: textLog
+                    anchors.fill: parent
+                    anchors.rightMargin: -border.width
+                    anchors.topMargin:  -border.width
+                    anchors.bottomMargin: -border.width
+                    border.width: 2
+                    border.color:"#2ac8a3"
+                    color: "transparent"
+                    Text {
+                        id: logContent
+                        padding: 5
+                        text: qsTr("[sensor values]")
+                        color: "#FFFFFF"
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9
+                    }
                 }
-
             }
+            /* Hidden at the moment */
+            TextField {
+                id: textEntryTest
+                visible: false
+                anchors.left: parent.left
+                anchors.top: textLogItem.bottom
+                anchors.topMargin: 5
+                anchors.leftMargin: 5
+                width: 160
+                color: "#ffff00"
+                Layout.leftMargin: 0
+                font.pixelSize: Qt.application.font.pixelSize * 0.8
+                Layout.fillWidth: true
+                background: Rectangle {
+                            opacity: 0.8
+                            radius: 4
+                            color: "#212529"
+                            implicitWidth: 100
+                            implicitHeight: 20
+                            border.color: "#2ac8a3"
+                            border.width: 2
+                        }
+            }
+
             Rectangle {
                 id: ownVideo
                 anchors.right: parent.right
                 anchors.top: parent.top
-                anchors.topMargin: 10
-                anchors.rightMargin: 10
-                width: 160
-                height: 120
+                width: mouseArea.containsMouse ? 180 : 160
+                height: mouseArea.containsMouse ? 140 : 120
+                anchors.topMargin: mouseArea.containsMouse ? 40 : 10
+                anchors.rightMargin: mouseArea.containsMouse ? 50 : 10
                 border.color: "#000000"
                 color: "#444444"
                 border.width: 3
                 radius: 5
                 opacity: 1
+                Behavior on width {
+                           NumberAnimation {
+                               duration: 200 //ms
+                           }
+                       }
+                Behavior on height {
+                           NumberAnimation {
+                               duration: 200 //ms
+                           }
+                       }
+                scale:  mouseArea.containsMouse ? 1.5 : 1.0
+                smooth: mouseArea.containsMouse
+                MouseArea {
+                   id: mouseArea
+                   anchors.fill: parent
+                   anchors.margins: -10
+                   hoverEnabled: true
+                }
+
                 VideoOutput {
                     anchors.topMargin: 3
                     anchors.rightMargin: 3
@@ -72,14 +130,17 @@ ApplicationWindow {
                     anchors.fill: parent
                     source: mediaplayer2
                 }
+
             }
+
+
+
             Text {
                 id: msgPage1
                 anchors.centerIn: parent
                 font.pointSize: 24
                 text: qsTr("Welcome to Video Bridge!")
             }
-
             Rectangle {
                 id: controlButtons
                 anchors.right: parent.right
