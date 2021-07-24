@@ -4,6 +4,7 @@ import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.11
 import QtMultimedia 5.8
 
+
 ApplicationWindow {
     visible: true
     width: 610

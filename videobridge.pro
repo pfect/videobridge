@@ -1,6 +1,6 @@
 QT += qml quick
 QT += network
-QT += multimedia multimediawidgets
+QT += multimedia
 
 CONFIG += c++11
 
