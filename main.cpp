@@ -13,14 +13,17 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQuickStyle>
 #include "bridge.h"
 
 bridge *vBridge;
 
 int main(int argc, char *argv[])
 {
+    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
+    QQuickStyle::setStyle("Material");
     vBridge = new bridge();
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("vBridge", vBridge);

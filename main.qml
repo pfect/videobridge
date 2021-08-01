@@ -1,15 +1,23 @@
-// QT 5.11
-import QtQuick 2.11
-import QtQuick.Controls 2.4
-import QtQuick.Layouts 1.11
+// QT 5.12.5 VIDEO BRIDGE
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.2
+import QtQuick.Controls.Material 2.15 // 2.3
+import QtQuick.VirtualKeyboard 2.15 // 2.2
+import QtQuick.Controls.Styles 1.4
 import QtMultimedia 5.8
 
-
+//
 ApplicationWindow {
+    id: window
     visible: true
-    width: 610
-    height: 498
+    visibility: Window.FullScreen
+    color: "#212529"
+    Material.theme: Material.Light
+    width: 720
+    height: 1440
     title: qsTr("Video Bridge")
+
 
     SwipeView {
         id: swipeView
@@ -309,6 +317,43 @@ ApplicationWindow {
         }
         TabButton {
             text: qsTr("Settings")
+        }
+    }
+    InputPanel {
+        id: inputPanel
+        z: 99
+        x: 0
+        anchors.topMargin: 5
+        anchors.left: window.left
+        anchors.right: window.right
+
+        anchors.bottomMargin: {
+            return Qt.inputMethod.visible ? -90 : undefined
+        }
+        y: {
+            return Qt.inputMethod.visible ? Qt.inputMethod.keyboardRectangle.height : window.height
+        }
+        width: window.width
+
+        states: State {
+            name: "visible"
+            when: inputPanel.active
+            PropertyChanges {
+                target: inputPanel
+                y: window.height - inputPanel.height
+            }
+        }
+        transitions: Transition {
+            from: ""
+            to: "visible"
+            reversible: true
+            ParallelAnimation {
+                NumberAnimation {
+                    properties: "y"
+                    duration: 500
+                    easing.type: Easing.InOutQuad
+                }
+            }
         }
     }
 }
