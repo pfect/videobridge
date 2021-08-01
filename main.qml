@@ -82,11 +82,9 @@ Window {
                 myEnv.addCellAccepted(myEnv.gcValue)
                 myEnv.addCellAcceptedUi(myEnv.gcValue,true) //
                 opsecDialog.close()
-
             }
         }
     }
-
 
     Label {
         x: 10
@@ -107,7 +105,7 @@ Window {
         y: 80
         color: "#28c6a0"
         font.pixelSize: Qt.application.font.pixelSize * 2.5
-        text: qsTr("Media streams")
+        text: qsTr("Video")
     }
     Rectangle {
             x: 10
@@ -125,10 +123,6 @@ Window {
             MediaPlayer {
                 id: mediaplayer1
                 source: vBridge.remoteVideoUrl;
-                metaData.onMetaDataChanged:
-                {
-                    // logContent.text = metaData.videoCodec
-                }
             }
             VideoOutput {
                 id: videoOutOne
@@ -153,6 +147,174 @@ Window {
             }
 
     }
+    Button {
+        x: 20
+        y: 380
+        width: 320
+        Material.background: Material.Orange
+        font.pixelSize: Qt.application.font.pixelSize * 3
+        Layout.minimumHeight: 50
+        Layout.leftMargin: 10
+        Layout.rightMargin: 10
+        Layout.fillWidth: true
+        padding: 10
+        text: qsTr("Disconnect")
+        onClicked: {
+            vBridge.mediaLive()
+            mediaplayer1.stop()
+            mediaplayer2.stop()
+        }
+    }
+    Button {
+        x: 360
+        y: 380
+        width: 320
+        Material.background: Material.Green
+        font.pixelSize: Qt.application.font.pixelSize * 3
+        Layout.minimumHeight: 50
+        Layout.leftMargin: 10
+        Layout.rightMargin: 10
+        Layout.fillWidth: true
+        padding: 10
+        text: qsTr("Connect")
+        onClicked: {
+            mediaplayer1.play()
+            mediaplayer2.play()
+        }
+    }
+
+    Label {
+        x: 10
+        y: 450
+        color: "#28c6a0"
+        font.pixelSize: Qt.application.font.pixelSize * 2.5
+        text: qsTr("Voice ")
+    }
+    Rectangle {
+            x: 10
+            y: 485
+            width:  680 // line width
+            height: 2
+            color: "#28c6a0"
+    }
+
+    Button {
+        id: rxOff
+        x: 20
+        y: 500
+        width: 160
+        Material.background: Material.Orange
+        font.pixelSize: Qt.application.font.pixelSize * 3
+        Layout.minimumHeight: 80
+        Layout.leftMargin: 10
+        Layout.rightMargin: 10
+        Layout.fillWidth: true
+        padding: 20
+        text: qsTr("RX Off")
+        onClicked: {
+        }
+    }
+    Button {
+        id: rxOn
+        x: 190
+        y: 500
+        width: 150
+        Material.background: Material.Green
+        font.pixelSize: Qt.application.font.pixelSize * 3
+        Layout.minimumHeight: 80
+        Layout.leftMargin: 10
+        Layout.rightMargin: 10
+        Layout.fillWidth: true
+        padding: 20
+        text: qsTr("RX On")
+        onClicked: {
+        }
+    }
+    Button {
+        id: pttButton
+        x: 360
+        y: 500
+        width: 320
+        Material.background: Material.Blue
+        font.pixelSize: Qt.application.font.pixelSize * 3
+        Layout.minimumHeight: 80
+        Layout.leftMargin: 10
+        Layout.rightMargin: 10
+        Layout.fillWidth: true
+        padding: 20
+        text: qsTr("TX")
+        onClicked: {
+        }
+    }
+
+    Label {
+        x: 10
+        y: 590
+        color: "#28c6a0"
+        font.pixelSize: Qt.application.font.pixelSize * 2.5
+        text: qsTr("Telemetry ")
+    }
+    Rectangle {
+            x: 10
+            y: 630
+            width:  680 // line width
+            height: 2
+            color: "#28c6a0"
+    }
+    Rectangle {
+       id: logText
+       x: 20
+       y: 650
+       radius: 4
+       color: "#212529"
+       implicitWidth: 660
+       implicitHeight: 200
+       border.color: "#2ac8a3"
+       border.width: 1
+       ListView {
+             width: 630; height: 200
+             spacing: 5
+             clip: true
+             model: myEnv.cellsAccepted
+
+             delegate: Rectangle {
+               height: 40
+               width: 200
+               color: "#00000000" // form: #AARRGGBB
+               Text {
+                   text: modelData;
+                   color: "#8BC34A"
+                   topPadding: 5
+                   leftPadding: 10
+                   anchors.leftMargin: parent.left
+                   anchors.topMargin: parent.top
+                   font.pixelSize: Qt.application.font.pixelSize * 2.5
+               }
+             }
+       }
+    }
+    TextField {
+        id: inputfieldText
+        x: 20
+        y: 860
+        width: 660
+        color: "#ffff00"
+        placeholderTextColor: "#28c6a0"
+        Layout.leftMargin: 10
+        placeholderText: ">"
+        font.pixelSize: Qt.application.font.pixelSize * 3
+        Layout.fillWidth: true
+
+        background: Rectangle {
+                    radius: 4
+                    color: "#212529"
+                    implicitWidth: 100
+                    implicitHeight: 24
+                    border.color: "#2ac8a3"
+                    border.width: 1
+                }
+    }
+
 //    Label {
 //        x: 10
 //        y: 120
@@ -182,301 +344,225 @@ Window {
 //        text: "RSRQ: <font color=\"#FFFFFF\">" + myEnv.rsrqValue + "</font> Voltage: <font color=\"#FFFFFF\">" +myEnv.voltageValue + " V" + "</font>"
 //    }
 
-    CheckBox {
-        id: controlOpsecTraffic
-        checked: false
-        x: 10
-        y: 280
-        text: qsTr("Stop traffic on new cells")
-        onCheckedChanged: {
-            if(controlOpsecTraffic.checked === false){
-                myEnv.controlOpsecTrafficBlock(false);
-            }
-            else {
-                myEnv.controlOpsecTrafficBlock(true);
-            }
-        }
-        indicator: Rectangle {
-                implicitWidth: 30
-                implicitHeight: 30
-                x: controlOpsecTraffic.leftPadding
-                y: parent.height / 2 - height / 2
-                radius: 3
-                border.color: controlOpsecTraffic.down ? "#28c6a0" : "#28c6a0"
+//    CheckBox {
+//        id: controlOpsecTraffic
+//        checked: false
+//        x: 10
+//        y: 280
+//        text: qsTr("Stop traffic on new cells")
+//        onCheckedChanged: {
+//            if(controlOpsecTraffic.checked === false){
+//                myEnv.controlOpsecTrafficBlock(false);
+//            }
+//            else {
+//                myEnv.controlOpsecTrafficBlock(true);
+//            }
+//        }
+//        indicator: Rectangle {
+//                implicitWidth: 30
+//                implicitHeight: 30
+//                x: controlOpsecTraffic.leftPadding
+//                y: parent.height / 2 - height / 2
+//                radius: 3
+//                border.color: controlOpsecTraffic.down ? "#28c6a0" : "#28c6a0"
 
-                Rectangle {
-                    width: 18
-                    height: 18
-                    x: 6
-                    y: 6
-                    radius: 2
-                    color: controlOpsecTraffic.down ? "#28c6a0" : "#28c6a0"
-                    visible: controlOpsecTraffic.checked
-                }
-            }
-            contentItem: Text {
-               text: controlOpsecTraffic.text
-               font.pixelSize: Qt.application.font.pixelSize * 2.5
-               opacity: enabled ? 1.0 : 0.3
-               color: controlOpsecTraffic.down ? "#28c6a0" : "#28c6a0"
-               verticalAlignment: Text.AlignVCenter
-               leftPadding: controlOpsecTraffic.indicator.width + controlOpsecTraffic.spacing
-           }
-    }
-    CheckBox {
-        id: controlOpsecNotify
-        checked: false
-        x: 430
-        y: 280
-        text: qsTr("Notify new cells")
-        onCheckedChanged: {
-            if(controlOpsecNotify.checked === false){
-                myEnv.controlOpsecNotify(false);
-            }
-            else {
-                myEnv.controlOpsecNotify(true);
-            }
-        }
+//                Rectangle {
+//                    width: 18
+//                    height: 18
+//                    x: 6
+//                    y: 6
+//                    radius: 2
+//                    color: controlOpsecTraffic.down ? "#28c6a0" : "#28c6a0"
+//                    visible: controlOpsecTraffic.checked
+//                }
+//            }
+//            contentItem: Text {
+//               text: controlOpsecTraffic.text
+//               font.pixelSize: Qt.application.font.pixelSize * 2.5
+//               opacity: enabled ? 1.0 : 0.3
+//               color: controlOpsecTraffic.down ? "#28c6a0" : "#28c6a0"
+//               verticalAlignment: Text.AlignVCenter
+//               leftPadding: controlOpsecTraffic.indicator.width + controlOpsecTraffic.spacing
+//           }
+//    }
+//    CheckBox {
+//        id: controlOpsecNotify
+//        checked: false
+//        x: 430
+//        y: 280
+//        text: qsTr("Notify new cells")
+//        onCheckedChanged: {
+//            if(controlOpsecNotify.checked === false){
+//                myEnv.controlOpsecNotify(false);
+//            }
+//            else {
+//                myEnv.controlOpsecNotify(true);
+//            }
+//        }
 
-        indicator: Rectangle {
-                implicitWidth: 30
-                implicitHeight: 30
-                x: controlOpsecNotify.leftPadding
-                y: parent.height / 2 - height / 2
-                radius: 3
-                border.color: controlOpsecNotify.down ? "#28c6a0" : "#28c6a0"
+//        indicator: Rectangle {
+//                implicitWidth: 30
+//                implicitHeight: 30
+//                x: controlOpsecNotify.leftPadding
+//                y: parent.height / 2 - height / 2
+//                radius: 3
+//                border.color: controlOpsecNotify.down ? "#28c6a0" : "#28c6a0"
 
-                Rectangle {
-                    width: 18
-                    height: 18
-                    x: 6
-                    y: 6
-                    radius: 2
-                    color: controlOpsecNotify.down ? "#28c6a0" : "#28c6a0"
-                    visible: controlOpsecNotify.checked
-                }
-            }
-            contentItem: Text {
-               text: controlOpsecNotify.text
-               font.pixelSize: Qt.application.font.pixelSize * 2.5
-               opacity: enabled ? 1.0 : 0.3
-               color: controlOpsecNotify.down ? "#28c6a0" : "#28c6a0"
-               verticalAlignment: Text.AlignVCenter
-               leftPadding: controlOpsecNotify.indicator.width + controlOpsecNotify.spacing
-           }
-    }
+//                Rectangle {
+//                    width: 18
+//                    height: 18
+//                    x: 6
+//                    y: 6
+//                    radius: 2
+//                    color: controlOpsecNotify.down ? "#28c6a0" : "#28c6a0"
+//                    visible: controlOpsecNotify.checked
+//                }
+//            }
+//            contentItem: Text {
+//               text: controlOpsecNotify.text
+//               font.pixelSize: Qt.application.font.pixelSize * 2.5
+//               opacity: enabled ? 1.0 : 0.3
+//               color: controlOpsecNotify.down ? "#28c6a0" : "#28c6a0"
+//               verticalAlignment: Text.AlignVCenter
+//               leftPadding: controlOpsecNotify.indicator.width + controlOpsecNotify.spacing
+//           }
+//    }
 
 
 
-    Label {
-        x: 10
-        y: 370
-        color: "#28c6a0"
-        font.pixelSize: Qt.application.font.pixelSize * 2.5
-        text: qsTr("Tunnel component for LTE outbound traffic")
+//    Label {
+//        x: 10
+//        y: 580
+//        color: "#28c6a0"
+//        font.pixelSize: Qt.application.font.pixelSize * 2.5
+//        text: qsTr("Tunnel component for LTE outbound traffic")
 
-    }
-    Rectangle {
-            x: 10
-            y: 410
-            width:  680
-            height: 2
-            color: "#28c6a0"
-    }
+//    }
+//    Rectangle {
+//            x: 10
+//            y: 410
+//            width:  680
+//            height: 2
+//            color: "#28c6a0"
+//    }
 
-    Rectangle {
-       x: 40
-       y: 430
-       radius: 4
-       color: "#212529"
-       implicitWidth: 630
-       implicitHeight: 60
-       border.color: "#2ac8a3"
-       border.width: 1
+//    Rectangle {
+//       x: 40
+//       y: 430
+//       radius: 4
+//       color: "#212529"
+//       implicitWidth: 630
+//       implicitHeight: 60
+//       border.color: "#2ac8a3"
+//       border.width: 1
 
-       Label {
-           width: 630
-           topPadding: 5
-           leftPadding: 10
-           color: "#28c6a0"
-           font.pixelSize: Qt.application.font.pixelSize * 3
-           text: qsTr("inactive")
-       }
+//       Label {
+//           width: 630
+//           topPadding: 5
+//           leftPadding: 10
+//           color: "#28c6a0"
+//           font.pixelSize: Qt.application.font.pixelSize * 3
+//           text: qsTr("inactive")
+//       }
 
-    }
+//    }
 
-    TextField {
-        id: inputfieldText
-        x: 40
-        y: 500
-        width: 300
-        color: "#ffff00"
-        placeholderTextColor: "#28c6a0"
-        Layout.leftMargin: 10
-        placeholderText: "[Gateway IP]"
-        font.pixelSize: Qt.application.font.pixelSize * 3
-        Layout.fillWidth: true
+//    TextField {
+//        id: inputfieldText
+//        x: 40
+//        y: 500
+//        width: 300
+//        color: "#ffff00"
+//        placeholderTextColor: "#28c6a0"
+//        Layout.leftMargin: 10
+//        placeholderText: "[Gateway IP]"
+//        font.pixelSize: Qt.application.font.pixelSize * 3
+//        Layout.fillWidth: true
 
-        background: Rectangle {
-                    radius: 4
-                    color: "#212529"
-                    implicitWidth: 100
-                    implicitHeight: 24
-                    border.color: "#2ac8a3"
-                    border.width: 1
-                }
-    }
-    TextField {
-        id: secretText
-        x: 370
-        y: 500
-        width: 300
-        color: "#ffff00"
-        placeholderTextColor: "#28c6a0"
-        Layout.leftMargin: 10
-        placeholderText: "[Secret]"
-        font.pixelSize: Qt.application.font.pixelSize * 3
-        Layout.fillWidth: true
+//        background: Rectangle {
+//                    radius: 4
+//                    color: "#212529"
+//                    implicitWidth: 100
+//                    implicitHeight: 24
+//                    border.color: "#2ac8a3"
+//                    border.width: 1
+//                }
+//    }
+//    TextField {
+//        id: secretText
+//        x: 370
+//        y: 500
+//        width: 300
+//        color: "#ffff00"
+//        placeholderTextColor: "#28c6a0"
+//        Layout.leftMargin: 10
+//        placeholderText: "[Secret]"
+//        font.pixelSize: Qt.application.font.pixelSize * 3
+//        Layout.fillWidth: true
 
-        background: Rectangle {
-                    radius: 4
-                    color: "#212529"
-                    implicitWidth: 100
-                    implicitHeight: 24
-                    border.color: "#2ac8a3"
-                    border.width: 1
+//        background: Rectangle {
+//                    radius: 4
+//                    color: "#212529"
+//                    implicitWidth: 100
+//                    implicitHeight: 24
+//                    border.color: "#2ac8a3"
+//                    border.width: 1
 
-                }
-    }
+//                }
+//    }
 
-    Button {
-        x: 40
-        y: 580
-        width: 300
-        Material.background: Material.Orange
-        font.pixelSize: Qt.application.font.pixelSize * 3
-        Layout.minimumHeight: 70
-        Layout.leftMargin: 10
-        Layout.rightMargin: 10
-        Layout.fillWidth: true
-        padding: 15
-        text: qsTr("Disconnect")
-        onClicked: {
-            vBridge.mediaLive()
-            mediaplayer1.play()
-            mediaplayer2.play()
-        }
-    }
-    Button {
-        x: 370
-        y: 580
-        width: 300
-        Material.background: Material.Green
-        font.pixelSize: Qt.application.font.pixelSize * 3
-        Layout.minimumHeight: 70
-        Layout.leftMargin: 10
-        Layout.rightMargin: 10
-        Layout.fillWidth: true
-        padding: 15
-        text: qsTr("Connect")
-        onClicked: {
-        }
-    }
 
-    Label {
-        x: 10
-        y: 680
-        color: "#28c6a0"
-        font.pixelSize: Qt.application.font.pixelSize * 2.5
-        text: qsTr("IP Network information")
-    }
-    Rectangle {
-            x: 10
-            y: 720
-            width:  680 // line width
-            height: 2
-            color: "#28c6a0"
-    }
+
+
 
     // IP information
-    Rectangle {
-       x: 40
-       y: 750
-       radius: 4
-       color: "#212529"
-       implicitWidth: 300
-       implicitHeight: 200
-       border.color: "#2ac8a3"
-       border.width: 1
-       Label {
-           width: 300
-           topPadding: 5
-           leftPadding: 10
-           color: "#8BC34A"
-           font.pixelSize: Qt.application.font.pixelSize * 2
-           text: myEnv.usbIpValue
-       }
-    }
+//    Rectangle {
+//       x: 40
+//       y: 750
+//       radius: 4
+//       color: "#212529"
+//       implicitWidth: 300
+//       implicitHeight: 200
+//       border.color: "#2ac8a3"
+//       border.width: 1
+//       Label {
+//           width: 300
+//           topPadding: 5
+//           leftPadding: 10
+//           color: "#8BC34A"
+//           font.pixelSize: Qt.application.font.pixelSize * 2
+//           text: myEnv.usbIpValue
+//       }
+//    }
 
-    Rectangle {
-       x: 370
-       y: 750
-       radius: 4
-       color: "#212529"
-       implicitWidth: 300
-       implicitHeight: 200
-       border.color: "#2ac8a3"
-       border.width: 1
-       Label {
-           width: 300
-           topPadding: 5
-           leftPadding: 10
-           color: "#8BC34A"
-           font.pixelSize: Qt.application.font.pixelSize * 2
-           text: myEnv.wwanIpValue
-       }
-    }
-    Label {
-        x: 40
-        y: 960
-        color: "#28c6a0"
-        font.pixelSize: Qt.application.font.pixelSize * 2.5
-        text: qsTr("Cell log [") + myEnv.cellAcceptedCounter + "/" + myEnv.cellDeniedCounter +"]"
-    }
+//    Rectangle {
+//       x: 370
+//       y: 750
+//       radius: 4
+//       color: "#212529"
+//       implicitWidth: 300
+//       implicitHeight: 200
+//       border.color: "#2ac8a3"
+//       border.width: 1
+//       Label {
+//           width: 300
+//           topPadding: 5
+//           leftPadding: 10
+//           color: "#8BC34A"
+//           font.pixelSize: Qt.application.font.pixelSize * 2
+//           text: myEnv.wwanIpValue
+//       }
+//    }
+//    Label {
+//        x: 40
+//        y: 960
+//        color: "#28c6a0"
+//        font.pixelSize: Qt.application.font.pixelSize * 2.5
+//        text: qsTr("Cell log [") + myEnv.cellAcceptedCounter + "/" + myEnv.cellDeniedCounter +"]"
+//    }
 
 
-    Rectangle {
-       id: logText
-       x: 40
-       y: 1000
-       radius: 4
-       color: "#212529"
-       implicitWidth: 630
-       implicitHeight: 200
-       border.color: "#2ac8a3"
-       border.width: 1
-       ListView {
-             width: 600; height: 200
-             spacing: 5
-             clip: true
-             model: myEnv.cellsAccepted
 
-             delegate: Rectangle {
-               height: 40
-               width: 200
-               color: "#00000000" // form: #AARRGGBB
-               Text {
-                   text: modelData;
-                   color: "#8BC34A"
-                   topPadding: 5
-                   leftPadding: 10
-                   anchors.leftMargin: parent.left
-                   anchors.topMargin: parent.top
-                   font.pixelSize: Qt.application.font.pixelSize * 2.5
-               }
-             }
-       }
-    }
 
 
     InputPanel {
