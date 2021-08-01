@@ -268,7 +268,7 @@ Window {
        radius: 4
        color: "#212529"
        implicitWidth: 660
-       implicitHeight: 200
+       implicitHeight: 300
        border.color: "#2ac8a3"
        border.width: 1
        ListView {
@@ -296,7 +296,7 @@ Window {
     TextField {
         id: inputfieldText
         x: 20
-        y: 860
+        y: 960
         width: 660
         color: "#ffff00"
         placeholderTextColor: "#28c6a0"
