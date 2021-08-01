@@ -5,6 +5,7 @@ import QtQuick.Window 2.14 //2.2
 import QtQuick.Controls.Material 2.15 // 2.3
 import QtQuick.VirtualKeyboard 2.15 // 2.2
 import QtQuick.Controls.Styles 1.4
+import QtMultimedia 5.8
 
 Window {
     id: window
@@ -106,7 +107,7 @@ Window {
         y: 80
         color: "#28c6a0"
         font.pixelSize: Qt.application.font.pixelSize * 2.5
-        text: qsTr("Mobile network information")
+        text: qsTr("Media streams")
     }
     Rectangle {
             x: 10
@@ -115,34 +116,71 @@ Window {
             height: 2
             color: "#28c6a0"
     }
-    Label {
-        x: 10
-        y: 120
-        color: "#28c6a0"
-        font.pixelSize: Qt.application.font.pixelSize * 2.5
-        text: "PLMN: <font color=\"#FFFFFF\">" + myEnv.plmnValue + "</font> TAC: <font color=\"#FFFFFF\">" + myEnv.taValue + "</font> Global CellID: <font color=\"#FFFFFF\">" + myEnv.gcValue +"</font>"
+    Rectangle {
+            id: videoSourceOne
+            x: 20
+            y: 130
+            width:  320
+            height: 240
+            MediaPlayer {
+                id: mediaplayer1
+                source: vBridge.remoteVideoUrl;
+                metaData.onMetaDataChanged:
+                {
+                    // logContent.text = metaData.videoCodec
+                }
+            }
+            VideoOutput {
+                id: videoOutOne
+                anchors.fill: parent
+                source: mediaplayer1
+            }
     }
-    Label {
-        x: 10
-        y: 160
-        color: "#28c6a0"
-        font.pixelSize: Qt.application.font.pixelSize * 2.5
-        text: "Serving Cell: <font color=\"#FFFFFF\">" + myEnv.scValue + "</font> AbsCH: <font color=\"#FFFFFF\">" + myEnv.acValue + "</font>"
+    Rectangle {
+            id: videoSourceTwo
+            x: 360
+            y: 130
+            width:  320
+            height: 240
+            MediaPlayer {
+                id: mediaplayer2
+                source: vBridge.localVideoUrl;
+            }
+            VideoOutput {
+                id: videoOutTwo
+                anchors.fill: parent
+                source: mediaplayer2
+            }
+
     }
-    Label {
-        x: 10
-        y: 200
-        color: "#28c6a0"
-        font.pixelSize: Qt.application.font.pixelSize * 2.5
-        text: "RSRP: <font color=\"#FFFFFF\">"+ myEnv.rsrpValue + "</font> SNR: <font color=\"#FFFFFF\">" + myEnv.snrValue + "</font> RSSI: <font color=\"#FFFFFF\">" + myEnv.rssiValue + "</font>"
-    }
-    Label {
-        x: 10
-        y: 240
-        color: "#28c6a0"
-        font.pixelSize: Qt.application.font.pixelSize * 2.5
-        text: "RSRQ: <font color=\"#FFFFFF\">" + myEnv.rsrqValue + "</font> Voltage: <font color=\"#FFFFFF\">" +myEnv.voltageValue + " V" + "</font>"
-    }
+//    Label {
+//        x: 10
+//        y: 120
+//        color: "#28c6a0"
+//        font.pixelSize: Qt.application.font.pixelSize * 2.5
+//        text: "PLMN: <font color=\"#FFFFFF\">" + myEnv.plmnValue + "</font> TAC: <font color=\"#FFFFFF\">" + myEnv.taValue + "</font> Global CellID: <font color=\"#FFFFFF\">" + myEnv.gcValue +"</font>"
+//    }
+//    Label {
+//        x: 10
+//        y: 160
+//        color: "#28c6a0"
+//        font.pixelSize: Qt.application.font.pixelSize * 2.5
+//        text: "Serving Cell: <font color=\"#FFFFFF\">" + myEnv.scValue + "</font> AbsCH: <font color=\"#FFFFFF\">" + myEnv.acValue + "</font>"
+//    }
+//    Label {
+//        x: 10
+//        y: 200
+//        color: "#28c6a0"
+//        font.pixelSize: Qt.application.font.pixelSize * 2.5
+//        text: "RSRP: <font color=\"#FFFFFF\">"+ myEnv.rsrpValue + "</font> SNR: <font color=\"#FFFFFF\">" + myEnv.snrValue + "</font> RSSI: <font color=\"#FFFFFF\">" + myEnv.rssiValue + "</font>"
+//    }
+//    Label {
+//        x: 10
+//        y: 240
+//        color: "#28c6a0"
+//        font.pixelSize: Qt.application.font.pixelSize * 2.5
+//        text: "RSRQ: <font color=\"#FFFFFF\">" + myEnv.rsrqValue + "</font> Voltage: <font color=\"#FFFFFF\">" +myEnv.voltageValue + " V" + "</font>"
+//    }
 
     CheckBox {
         id: controlOpsecTraffic
@@ -324,6 +362,9 @@ Window {
         padding: 15
         text: qsTr("Disconnect")
         onClicked: {
+            vBridge.mediaLive()
+            mediaplayer1.play()
+            mediaplayer2.play()
         }
     }
     Button {
